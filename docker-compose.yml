@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15 # lub inna wersja, np. 14, 13 itd.
+    container_name: salos_postgres
+    ports:
+      - "5432:5432" # port lokalny:port w kontenerze
+    environment:
+      POSTGRES_USER: salos_user
+      POSTGRES_PASSWORD: salos_password
+      POSTGRES_DB: salos_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
