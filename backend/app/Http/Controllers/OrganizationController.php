@@ -8,28 +8,39 @@ use Illuminate\Support\Facades\Hash;
 
 class OrganizationController extends Controller
 {
+    /**
+     * Dodawanie nowego członka do organizacji.
+     * Tylko zalogowany user z rolą 'admin' może to zrobić.
+     */
     public function addMember(Request $request)
     {
-        // Sprawdzamy, czy zalogowany user jest adminem
         $authUser = $request->user();
+
+        // Sprawdzamy rolę admin
         if ($authUser->role !== 'admin') {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $validated = $request->validate([
-            'name' => 'required',
+        // Walidacja danych nowego członka
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
         ]);
 
+        // Tworzymy nowego usera w tej samej organizacji co admin
         $newUser = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'organization_id' => $authUser->organization_id, // ta sama org co admin
-            'role' => 'member', // domyślnie
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'organization_id' => $authUser->organization_id,
+            'role' => 'member',
         ]);
 
-        return response()->json(['message' => 'User created', 'user' => $newUser], 201);
+        // Zwracamy info w JSON
+        return response()->json([
+            'message' => 'User created',
+            'user' => $newUser,
+        ], 201);
     }
 }

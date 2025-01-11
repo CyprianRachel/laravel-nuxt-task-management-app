@@ -9,14 +9,8 @@ class Organization extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'address',
-        'phone',
-        'description',
-    ];
-
-    // Relacja odwrotna z User
+    protected $fillable = ['name', 'address', 'phone', 'description'];
+  
     public function users()
     {
         return $this->hasMany(User::class);
