@@ -61,7 +61,10 @@ const onSubmit = async () => {
     const { data } = await $api.post("/register", form.value);
     authStore.setToken(data.access_token);
     authStore.setUser(data.user);
-    navigateTo("/");
+    navigateTo({
+      path: "/", // Przekierowanie do strony głównej
+      query: { success: "Dziękujemy za rejestrację!" }, // Wiadomość w URL
+    });
   } catch (err) {
     error.value = "Registration failed";
   }

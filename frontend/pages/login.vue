@@ -1,22 +1,25 @@
 <template>
-  <div class="login">
+  <div class="login centered">
     <h1>Login</h1>
     <form @submit.prevent="onSubmit">
-      <label>Email:</label>
-      <input
-        v-model="form.email"
-        type="email"
-        placeholder="Enter your email"
-        required
-      />
-
-      <label>Password:</label>
-      <input
-        v-model="form.password"
-        type="password"
-        placeholder="Enter your password"
-        required
-      />
+      <p>
+        <label>Email:</label>
+        <input
+          v-model="form.email"
+          type="email"
+          placeholder="Enter your email"
+          required
+        />
+      </p>
+      <p>
+        <label>Password:</label>
+        <input
+          v-model="form.password"
+          type="password"
+          placeholder="Enter your password"
+          required
+        />
+      </p>
 
       <button type="submit">Login</button>
     </form>
@@ -43,7 +46,7 @@ const onSubmit = async () => {
     const { data } = await $api.post("/login", form.value);
     authStore.setToken(data.access_token);
     authStore.setUser(data.user);
-    navigateTo("/");
+    navigateTo("/"); // Przekierowanie do strony głównej
   } catch (err) {
     error.value = "Invalid login credentials";
   }
