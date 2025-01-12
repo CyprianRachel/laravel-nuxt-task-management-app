@@ -12,6 +12,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     const authStore = useAuthStore();
     if (authStore.token) {
       config.headers.Authorization = `Bearer ${authStore.token}`;
+      console.log("Token dodany do żądania:", authStore.token);
+    } else {
+      console.log("Brak tokena w axios podczas wysyłania żądania");
     }
     return config;
   });

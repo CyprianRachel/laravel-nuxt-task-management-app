@@ -49,4 +49,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function getTasks()
+{
+    $tasks = Task::with(['orderItems.product'])->get(); // Pobieramy zadania wraz z produktami przypisanymi do zamówienia
+    return response()->json($tasks);
+}
+
 }

@@ -5,8 +5,15 @@
     <!-- Wiadomość po rejestracji -->
     <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     <p>Witaj, {{ authStore.user?.name }}!</p>
+
     <!-- Guzik wylogowania -->
-    <button @click="logout">Wyloguj się</button>
+    <p><button @click="logout">Wyloguj się</button></p>
+
+    <!-- Guzik do orders -->
+    <p><button @click="goToOrders">Zobacz listę zamówień</button></p>
+
+    <!-- Guzik do orders -->
+    <p><button @click="goToTasks">Zobacz swoje zamówienia</button></p>
   </div>
 </template>
 
@@ -16,6 +23,8 @@ import { useAuthStore } from "~/stores/auth";
 
 const authStore = useAuthStore();
 const successMessage = ref("");
+const team = ref([]);
+const teamError = ref("");
 
 if (!authStore.isLoggedIn) {
   navigateTo("/login");
@@ -35,18 +44,30 @@ const logout = () => {
     navigateTo("/login"); // Przekierowanie na stronę logowania
   });
 };
+
+// Funkcja przekierowująca do strony zamówień
+const goToOrders = () => {
+  navigateTo("/orders"); // Przekierowanie na stronę /orders
+};
+
+// Funkcja przekierowująca do strony tasków
+const goToTasks = () => {
+  navigateTo("/tasks"); // Przekierowanie na stronę /orders
+};
 </script>
 
 <style>
-.centered {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
 .success-message {
   color: green;
   font-weight: bold;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.centered {
+  text-align: center;
 }
 </style>

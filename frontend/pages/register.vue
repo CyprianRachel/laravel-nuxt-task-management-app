@@ -1,38 +1,46 @@
 <template>
-  <div class="register">
+  <div class="register centered">
     <h1>Register</h1>
     <form @submit.prevent="onSubmit">
-      <label>Name:</label>
-      <input
-        v-model="form.name"
-        type="text"
-        placeholder="Enter your name"
-        required
-      />
+      <p>
+        <label>Name:</label>
+        <input
+          v-model="form.name"
+          type="text"
+          placeholder="Enter your name"
+          required
+        />
+      </p>
 
-      <label>Email:</label>
-      <input
-        v-model="form.email"
-        type="email"
-        placeholder="Enter your email"
-        required
-      />
+      <p>
+        <label>Email:</label>
+        <input
+          v-model="form.email"
+          type="email"
+          placeholder="Enter your email"
+          required
+        />
+      </p>
 
-      <label>Password:</label>
-      <input
-        v-model="form.password"
-        type="password"
-        placeholder="Enter your password"
-        required
-      />
+      <p>
+        <label>Password:</label>
+        <input
+          v-model="form.password"
+          type="password"
+          placeholder="Enter your password"
+          required
+        />
+      </p>
 
-      <label>Organization Name:</label>
-      <input
-        v-model="form.organization_name"
-        type="text"
-        placeholder="Enter your organization name"
-        required
-      />
+      <p>
+        <label>Organization Name:</label>
+        <input
+          v-model="form.organization_name"
+          type="text"
+          placeholder="Enter your organization name"
+          required
+        />
+      </p>
 
       <button type="submit">Register</button>
     </form>
