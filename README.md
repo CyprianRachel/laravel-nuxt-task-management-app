@@ -44,13 +44,3 @@ Aplikacja do zarządzania zadaniami w zespołach, zaprojektowana z myślą o efe
 5. **Bezpieczeństwo:**
    - Uwierzytelnianie oparte na tokenach.
    - Dostęp do zasobów ograniczony na podstawie roli użytkownika.
-
----
-
-## **Instalacja**
-
-1. **Klonowanie repozytorium:**
-
-   ```bash
-   git clone https://github.com/your-username/task-management-app.git
-   cd task-management-app
