@@ -15,25 +15,27 @@ class TaskController extends Controller
 
        // Metoda do pobierania zadań tylko dla użytkowników, którzy nie są adminami
        public function getTasksForUser(Request $request)
-       {
-           try {
-               // Pobierz aktualnie zalogowanego użytkownika
-               $user = Auth::user();
-   
-               // Jeśli użytkownik nie jest administratorem, zwróć jego zadania
-               if ($user->role === 'admin') {
-                   return response()->json([], 200);  // Zwrócenie pustej tablicy dla admina
-               }
-   
-               // Pobranie zadań przypisanych do tego użytkownika
-               $tasks = Task::where('user_id', $user->id)->get();
-   
-               return response()->json($tasks);  // Zwrócenie zadań w formacie JSON
-           } catch (\Exception $e) {
-               // W przypadku błędu, zwróć komunikat błędu i kod 500
-               return response()->json(['message' => 'Wystąpił błąd podczas pobierania zadań', 'error' => $e->getMessage()], 500);
-           }
-       }
+            {
+                try {
+                    // Pobierz aktualnie zalogowanego użytkownika
+                    $user = Auth::user();
+
+                    // Jeśli użytkownik nie jest administratorem, pobierz jego zadania
+                    if ($user->role !== 'admin') {
+                        // Pobranie zadań użytkownika z powiązanymi produktami i zamówieniami
+                        $tasks = Task::where('user_id', $user->id)
+                            ->with(['order.items.product']) // Załaduj powiązane produkty przez zamówienie
+                            ->get();
+
+                        return response()->json($tasks); // Zwrócenie zadań z produktami w formacie JSON
+                    }
+
+                    return response()->json([], 200); // Jeśli użytkownik jest adminem, zwróć pustą tablicę
+                } catch (\Exception $e) {
+                    // W przypadku błędu, zwróć komunikat błędu i kod 500
+                    return response()->json(['message' => 'Wystąpił błąd podczas pobierania zadań', 'error' => $e->getMessage()], 500);
+                }
+            }
     
 
     public function assignTask(Request $request, $orderId)

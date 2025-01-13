@@ -1,5 +1,5 @@
 <template>
-  <div class="centered">
+  <div class="tasks-page">
     <h1>Twoje zadania</h1>
 
     <!-- Ładowanie -->
@@ -8,33 +8,59 @@
     <!-- Błąd -->
     <div v-if="error" class="error">{{ error }}</div>
 
-    <!-- Wyświetlanie zadań -->
-    <div v-if="tasks.length === 0" class="no-tasks">
+    <!-- Brak zadań -->
+    <div v-if="!loading && tasks.length === 0" class="no-tasks">
       Brak przypisanych zadań.
     </div>
 
+    <!-- Lista zadań -->
     <div v-for="task in tasks" :key="task.id" class="task-item">
       <div>
         <p><strong>Zadanie ID:</strong> {{ task.id }}</p>
         <p><strong>Zamówienie ID:</strong> {{ task.order_id }}</p>
         <p>
           <strong>Status:</strong>
-          {{ task.completed ? "Zakończone" : "W trakcie" }}
+          <span
+            :class="{
+              'status-in-progress': !task.completed,
+              'status-completed': task.completed,
+            }"
+          >
+            {{ task.completed ? " Zakończone" : " W trakcie" }}
+          </span>
         </p>
-        <button
-          v-if="!task.completed"
-          @click="markAsDone(task.id, task.order_id)"
-          class="done-button"
-        >
-          Zrobione
-        </button>
       </div>
-      <hr />
-    </div>
 
-    <!-- Komunikat o sukcesie -->
-    <div v-if="successMessage" class="success-message">
-      {{ successMessage }}
+      <!-- Wyświetlanie produktów powiązanych z zadaniem -->
+      <div v-if="task.products && task.products.length > 0">
+        <h3>Produkty:</h3>
+        <ul>
+          <li v-for="product in task.products" :key="product.id">
+            <input
+              type="checkbox"
+              :id="`product-${task.id}-${product.id}`"
+              :checked="product.checked"
+              @change="toggleProductCheck(task.id, product.id)"
+            />
+            <label
+              :for="`product-${task.id}-${product.id}`"
+              :class="{ 'checked-product': product.checked }"
+            >
+              {{ product.name }} - {{ product.description }} (Ilość:
+              {{ product.quantity }})
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Przycisk oznaczenia jako zrobione -->
+      <button
+        v-if="!task.completed"
+        @click="markAsDone(task.id, task.order_id)"
+        class="done-button"
+      >
+        Oznacz jako zrobione
+      </button>
     </div>
   </div>
 </template>
@@ -42,72 +68,94 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
-// Ref do przechowywania zadań, stanu ładowania i błędów
 const tasks = ref([]);
 const loading = ref(false);
 const error = ref("");
-const successMessage = ref("");
 
-// Funkcja do pobierania zadań przypisanych do użytkownika
+// Funkcja pobierania zadań przypisanych do użytkownika
 const fetchTasks = async () => {
   loading.value = true;
-  error.value = ""; // Resetowanie błędów
+  error.value = "";
   try {
-    const { $api } = useNuxtApp(); // Jeśli używasz Nuxt 3, pozostaw to w tej formie
-    const response = await $api.get("/tasks"); // Wywołanie API do pobrania zadań
+    const { $api } = useNuxtApp(); // Jeśli używasz Nuxt 3
+    const response = await $api.get("/tasks");
 
     if (response.data && Array.isArray(response.data)) {
-      tasks.value = response.data; // Przypisanie otrzymanych zadań
+      tasks.value = response.data.map((task) => ({
+        ...task,
+        products:
+          task.order?.items.map((item) => ({
+            ...item.product,
+            quantity: item.quantity,
+            checked: false, // Domyślnie checkbox nie jest zaznaczony
+          })) || [],
+      }));
     } else {
-      error.value = "Zadania są puste lub niepoprawnie sformatowane."; // Jeśli dane nie są w odpowiedniej strukturze
+      error.value = "Niepoprawna struktura danych.";
     }
   } catch (err) {
-    error.value = "Nie udało się pobrać zadań."; // Ustawienie błędu, jeśli nie uda się pobrać danych
+    error.value = "Nie udało się pobrać zadań.";
   } finally {
-    loading.value = false; // Kończenie ładowania
+    loading.value = false;
   }
 };
 
-// Funkcja do oznaczenia zadania jako zakończone
+// Funkcja oznaczania zadania jako zrobione
 const markAsDone = async (taskId, orderId) => {
   loading.value = true;
-  error.value = ""; // Resetowanie błędów
-  successMessage.value = ""; // Resetowanie komunikatu o sukcesie
+  error.value = "";
   try {
     const { $api } = useNuxtApp();
-
-    // Wyślij zapytanie do backendu, aby usunąć zadanie i zaktualizować status zamówienia
     await $api.post(`/tasks/${taskId}/mark-as-done`, { order_id: orderId });
 
-    // Zaktualizowanie statusu zadania lokalnie
-    tasks.value = tasks.value.filter((task) => task.id !== taskId);
-
-    // Ustawienie komunikatu o sukcesie
-    successMessage.value = "Zadanie zostało zakończone!";
-
-    // Zmiana statusu na 'closed' w zamówieniu
-    const updatedOrder = await $api.put(`/orders/${orderId}/close`);
-    console.log(updatedOrder.data);
+    // Zaktualizuj lokalnie status zadania
+    const taskIndex = tasks.value.findIndex((task) => task.id === taskId);
+    if (taskIndex > -1) {
+      tasks.value[taskIndex].completed = true;
+    }
   } catch (err) {
-    error.value = "Nie udało się zakończyć zadania."; // Obsługa błędów
+    error.value = "Nie udało się zakończyć zadania.";
   } finally {
-    loading.value = false; // Kończenie ładowania
+    loading.value = false;
   }
 };
 
-// Ładowanie zadań po załadowaniu komponentu
+// Funkcja toggle dla checkboxa
+const toggleProductCheck = (taskId, productId) => {
+  const task = tasks.value.find((t) => t.id === taskId);
+  if (task) {
+    const product = task.products.find((p) => p.id === productId);
+    if (product) {
+      product.checked = !product.checked; // Zmień stan zaznaczenia
+    }
+  }
+};
+
+// Pobieranie zadań przy załadowaniu komponentu
 onMounted(() => {
-  fetchTasks(); // Wywołanie funkcji pobierania zadań
+  fetchTasks();
 });
 </script>
 
 <style scoped>
+.tasks-page {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
 .error {
   color: red;
   font-weight: bold;
+  text-align: center;
 }
 
 .no-tasks {
+  text-align: center;
   font-style: italic;
   color: grey;
 }
@@ -124,6 +172,34 @@ onMounted(() => {
   margin: 5px 0;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+label {
+  margin-left: 5px;
+}
+
+label.checked-product {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.status-in-progress {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-completed {
+  color: green;
+  font-weight: bold;
+}
+
 .done-button {
   background-color: green;
   color: white;
@@ -135,10 +211,5 @@ onMounted(() => {
 
 .done-button:hover {
   background-color: darkgreen;
-}
-
-.success-message {
-  color: green;
-  font-weight: bold;
 }
 </style>

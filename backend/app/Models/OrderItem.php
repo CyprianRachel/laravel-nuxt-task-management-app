@@ -20,6 +20,7 @@ class OrderItem extends Model
     // Relacja z Product
     public function product()
     {
-        return $this->belongsTo(Product::class);
+    return $this->belongsTo(Product::class);
     }
+
 }

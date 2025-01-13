@@ -1,0 +1,160 @@
+<template>
+  <div class="add-member-page">
+    <h1>Dodaj członka do organizacji</h1>
+
+    <!-- Formularz dodawania członka -->
+    <form @submit.prevent="addMember">
+      <div class="form-group">
+        <label for="name">Imię i nazwisko</label>
+        <input
+          type="text"
+          id="name"
+          v-model="form.name"
+          required
+          placeholder="Wpisz imię i nazwisko"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Adres e-mail</label>
+        <input
+          type="email"
+          id="email"
+          v-model="form.email"
+          required
+          placeholder="Wpisz adres e-mail"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Hasło</label>
+        <input
+          type="password"
+          id="password"
+          v-model="form.password"
+          required
+          minlength="8"
+          placeholder="Wpisz hasło (min. 8 znaków)"
+        />
+      </div>
+
+      <!-- Przycisk dodania członka -->
+      <button type="submit" class="btn-submit">Dodaj członka</button>
+    </form>
+
+    <!-- Wiadomość o sukcesie -->
+    <div v-if="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+
+    <!-- Wiadomość o błędzie -->
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const form = ref({
+  name: "",
+  email: "",
+  password: "",
+});
+
+const successMessage = ref("");
+const errorMessage = ref("");
+
+// Funkcja dodawania członka
+const addMember = async () => {
+  successMessage.value = "";
+  errorMessage.value = "";
+
+  try {
+    const { $api } = useNuxtApp(); // Użycie Nuxt.js do komunikacji z backendem
+    const response = await $api.post("/organization/add-member", {
+      name: form.value.name,
+      email: form.value.email,
+      password: form.value.password,
+    });
+
+    // Ustawienie wiadomości o sukcesie
+    successMessage.value = "Nowy członek został dodany!";
+    form.value.name = "";
+    form.value.email = "";
+    form.value.password = "";
+  } catch (error) {
+    // Obsługa błędów
+    if (error.response?.status === 403) {
+      errorMessage.value = "Nie masz uprawnień do dodawania członków.";
+    } else if (error.response?.status === 422) {
+      errorMessage.value =
+        "Dane są nieprawidłowe. Sprawdź wprowadzone informacje.";
+    } else {
+      errorMessage.value = "Wystąpił błąd. Spróbuj ponownie.";
+    }
+  }
+};
+</script>
+
+<style scoped>
+.add-member-page {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.success-message {
+  margin-top: 1rem;
+  color: green;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-message {
+  margin-top: 1rem;
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
+</style>

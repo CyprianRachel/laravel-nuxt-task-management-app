@@ -9,7 +9,12 @@
     <div v-if="error" class="error">{{ error }}</div>
 
     <!-- Lista zamówień -->
-    <div class="bordered" v-for="order in orders" :key="order.id">
+    <div
+      class="bordered"
+      v-for="order in orders"
+      :key="order.id"
+      :class="{ 'closed-order': order.status === 'closed' }"
+    >
       <h2>Zamówienie #{{ order.id }}</h2>
       <p>Status: {{ order.status }}</p>
       <ul>
@@ -181,5 +186,10 @@ onMounted(async () => {
   margin-bottom: 1rem;
   width: 300px;
   border-radius: 1rem;
+}
+
+.closed-order {
+  background-color: #d4edda; /* Jasnozielone tło */
+  border-color: #c3e6cb;
 }
 </style>
