@@ -1,11 +1,32 @@
 version: "3.8"
 
 services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: salos_backend
+    ports:
+      - "80:80" # Port lokalny:port w kontenerze
+    environment:
+      APP_ENV: production
+      APP_KEY: base64:J9gPkgtITHYrUE/asZPcY9la1oWCgI3vsEQORpC92nE=
+      APP_DEBUG: false
+      APP_URL: http://localhost
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: salos_db
+      DB_USERNAME: salos_user
+      DB_PASSWORD: salos_password
+    depends_on:
+      - postgres
+
   postgres:
-    image: postgres:15 # lub inna wersja, np. 14, 13 itd.
+    image: postgres:15
     container_name: salos_postgres
     ports:
-      - "5432:5432" # port lokalny:port w kontenerze
+      - "5432:5432"
     environment:
       POSTGRES_USER: salos_user
       POSTGRES_PASSWORD: salos_password
