@@ -3,8 +3,8 @@
 Aplikacja do zarządzania zadaniami w zespołach, zaprojektowana z myślą o efektywnym przypisywaniu i monitorowaniu realizacji zadań w ramach organizacji. Aplikacja pozwala administratorom generować zadania, przypisywać je członkom zespołu oraz monitorować postępy w realizacji.
 
 ![Project Image](frontend/assets/project-look.png)
+![laravel-nuxt-task-management-app vercel app_orders](https://github.com/user-attachments/assets/f3dc382b-c17a-4ebd-b938-e9d00bb87f20)
 
----
 
 ## **Technologie**
 
