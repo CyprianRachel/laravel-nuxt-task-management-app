@@ -1,28 +1,32 @@
-# Wybierz obraz bazowy z PHP 8.2
+# PHP z FPM
 FROM php:8.2-fpm
 
-# Instalacja zależności systemowych i rozszerzeń PHP
+# Instalacja zależności systemowych
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
     unzip \
     libpq-dev && \
     docker-php-ext-install pdo pdo_pgsql
 
-# Ustaw katalog roboczy
-WORKDIR /var/www
+# Skopiuj plik konfiguracyjny Nginx
+COPY nginx.conf /etc/nginx/sites-enabled/default
 
-# Skopiuj pliki projektu do obrazu
+# Ustaw katalog roboczy
+WORKDIR /var/www/html
+
+# Skopiuj aplikację do kontenera
 COPY . .
 
-# Instalacja zależności Laravel za pomocą Composer
+# Instalacja zależności Laravel
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Ustawienia uprawnień
-RUN chown -R www-data:www-data /var/www
+# Uprawnienia
+RUN chown -R www-data:www-data /var/www/html
 
-# Eksponuj port
-EXPOSE 9000
+# Eksponuj port HTTP
+EXPOSE 80
 
 # Komenda startowa
-CMD ["php-fpm"]
+CMD service nginx start && php-fpm
