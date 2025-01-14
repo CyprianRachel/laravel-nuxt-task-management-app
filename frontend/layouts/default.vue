@@ -69,21 +69,20 @@ const logout = () => {
   padding: 1rem 0rem;
   border-bottom: 1px solid #ddd;
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: center;
+  justify-content: flex-start; /* Dostosowane */
   align-items: center;
+  overflow-x: auto; /* Scroll poziomy */
 }
 
 .app-menu ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
+  padding: 0rem 1rem;
+  margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 1rem;
   align-items: center;
+  white-space: nowrap;
+  flex-wrap: nowrap;
 }
 
 .app-menu li {
@@ -105,6 +104,12 @@ const logout = () => {
 .app-menu a:hover,
 .app-menu button:hover {
   background-color: #0056b3;
+}
+
+/* Dodane dla poprawy przewijania na urządzeniach mobilnych */
+.app-menu {
+  -webkit-overflow-scrolling: touch; /* Płynne przewijanie na iOS */
+  scroll-behavior: smooth; /* Płynne przewijanie */
 }
 
 .app-content {
