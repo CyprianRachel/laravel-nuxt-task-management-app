@@ -71,6 +71,11 @@ class TaskController extends Controller
     $task->completed = true;
     $task->save();
 
+    // Zmiana statusu na zakończone
+    $order = $task->order;
+    $order->status = 'closed';
+    $order->save();
+
     // Usunięcie zadania z tabeli tasks (opcjonalnie)
     $task->delete();
 

@@ -3,7 +3,9 @@
     <h1>Zarządzanie zamówieniami</h1>
 
     <!-- Guzik do generowania zamówień tylko dla adminów -->
-    <button v-if="isAdmin" @click="generateOrders">Odbierz zamówienia</button>
+    <button class="get-tasks-button" v-if="isAdmin" @click="generateOrders">
+      Odbierz zamówienia
+    </button>
 
     <div v-if="loading">Ładowanie...</div>
     <div v-if="error" class="error">{{ error }}</div>
@@ -16,15 +18,29 @@
       :class="{ 'closed-order': order.status === 'closed' }"
     >
       <h2>Zamówienie #{{ order.id }}</h2>
-      <p>Status: {{ order.status }}</p>
+      <p>
+        Status:
+        <span
+          :class="{
+            'status-open': order.status === 'open',
+            'status-closed': order.status === 'closed',
+          }"
+        >
+          {{ order.status === "open" ? "Do wysłania" : "Zakończone" }}
+        </span>
+      </p>
+      <h3>Produkty:</h3>
+
       <ul>
         <li v-for="item in order.items" :key="item.id">
-          {{ item.product.name }} - Ilość: {{ item.quantity }}
+          {{ item.product.name }} - {{ item.product.description }} - Ilość:
+          {{ item.quantity }}
         </li>
       </ul>
 
       <!-- Przycisk przypisania zadania do zamówienia tylko dla adminów -->
       <button
+        class="add-task-button"
         v-if="order.status === 'open' && isAdmin"
         @click="showUserSelection(order.id)"
       >
@@ -42,8 +58,10 @@
           {{ user.name }} ({{ user.email }})
         </li>
       </ul>
-      <button @click="assignTask">Wyślij</button>
-      <button @click="closeModal">Anuluj</button>
+      <div class="modal-buttons">
+        <button @click="assignTask">Wyślij</button>
+        <button @click="closeModal">Anuluj</button>
+      </div>
     </div>
   </div>
 </template>
@@ -62,7 +80,7 @@ const selectedOrderId = ref(null);
 const selectedUserId = ref(null);
 
 // Sprawdzamy, czy użytkownik jest administratorem
-const isAdmin = ref(authStore.user?.role === "admin");
+const isAdmin = computed(() => authStore.user?.role === "admin");
 
 // Funkcja do pobierania zamówień
 const fetchOrders = async () => {
@@ -165,9 +183,20 @@ onMounted(async () => {
   left: 50%;
   transform: translate(-50%, -20%);
   background: white;
-  border: 1px solid black;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
   padding: 20px;
   z-index: 1000;
+}
+
+.modal ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 0.75rem;
 }
 
 .modal-overlay {
@@ -180,16 +209,58 @@ onMounted(async () => {
   z-index: 999;
 }
 
+.modal-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
 .bordered {
-  border: 1px solid black;
   padding: 1rem;
   margin-bottom: 1rem;
-  width: 300px;
-  border-radius: 1rem;
+  width: 350px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .closed-order {
   background-color: #d4edda; /* Jasnozielone tło */
   border-color: #c3e6cb;
+}
+
+.status-open {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-closed {
+  color: green;
+  font-weight: bold;
+}
+
+.get-tasks-button {
+  margin-bottom: 2rem;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  padding-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.add-task-button {
+  margin-top: 1rem;
 }
 </style>

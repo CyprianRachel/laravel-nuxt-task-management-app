@@ -16,10 +16,10 @@
     <!-- Lista zadań -->
     <div v-for="task in tasks" :key="task.id" class="task-item">
       <div>
-        <p><strong>Zadanie ID:</strong> {{ task.id }}</p>
-        <p><strong>Zamówienie ID:</strong> {{ task.order_id }}</p>
+        <!-- <p><strong>Zadanie ID:</strong> {{ task.id }}</p> -->
+        <h2><strong>Zamówienie </strong>#{{ task.order_id }}</h2>
         <p>
-          <strong>Status:</strong>
+          Status:
           <span
             :class="{
               'status-in-progress': !task.completed,
@@ -32,7 +32,10 @@
       </div>
 
       <!-- Wyświetlanie produktów powiązanych z zadaniem -->
-      <div v-if="task.products && task.products.length > 0">
+      <div
+        class="products-list"
+        v-if="task.products && task.products.length > 0"
+      >
         <h3>Produkty:</h3>
         <ul>
           <li v-for="product in task.products" :key="product.id">
@@ -141,7 +144,10 @@ onMounted(() => {
 .tasks-page {
   max-width: 800px;
   margin: 0 auto;
-  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
@@ -162,10 +168,11 @@ h1 {
 
 .task-item {
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 1rem;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   background-color: #f9f9f9;
+  width: 350px;
 }
 
 .task-item p {
@@ -175,10 +182,11 @@ h1 {
 ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
-  margin-bottom: 10px;
+  margin-bottom: 0.75rem;
 }
 
 label {
@@ -211,5 +219,12 @@ label.checked-product {
 
 .done-button:hover {
   background-color: darkgreen;
+}
+
+.products-list ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
 }
 </style>

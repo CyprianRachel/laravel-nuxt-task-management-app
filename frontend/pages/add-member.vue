@@ -1,6 +1,6 @@
 <template>
   <div class="add-member-page">
-    <h1>Dodaj członka do organizacji</h1>
+    <h1>Dodaj członka zespołu</h1>
 
     <!-- Formularz dodawania członka -->
     <form @submit.prevent="addMember">
@@ -102,13 +102,7 @@ const addMember = async () => {
 .add-member-page {
   max-width: 500px;
   margin: 0 auto;
-  padding: 1rem;
   font-family: Arial, sans-serif;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
 }
 
 .form-group {
@@ -127,17 +121,6 @@ input {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-}
-
-.btn-submit {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
 }
 
 .btn-submit:hover {

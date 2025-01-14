@@ -1,27 +1,27 @@
 <template>
-  <div class="login centered">
-    <h1>Login</h1>
+  <div class="login">
+    <h1>Zaloguj się</h1>
     <form @submit.prevent="onSubmit">
-      <p>
-        <label>Email:</label>
+      <div class="form-group">
+        <label>Adres e-mail </label>
         <input
           v-model="form.email"
           type="email"
           placeholder="Enter your email"
           required
         />
-      </p>
-      <p>
-        <label>Password:</label>
+      </div>
+      <div class="form-group">
+        <label>Hasło</label>
         <input
           v-model="form.password"
           type="password"
           placeholder="Enter your password"
           required
         />
-      </p>
+      </div>
 
-      <button type="submit">Login</button>
+      <button type="submit">Zaloguj się</button>
     </form>
 
     <p v-if="error" class="error">{{ error }}</p>
@@ -53,8 +53,46 @@ const onSubmit = async () => {
 };
 </script>
 
-<style>
-.error {
+<style scoped>
+.login {
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.success-message {
+  margin-top: 1rem;
+  color: green;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-message {
+  margin-top: 1rem;
   color: red;
+  font-weight: bold;
+  text-align: center;
 }
 </style>

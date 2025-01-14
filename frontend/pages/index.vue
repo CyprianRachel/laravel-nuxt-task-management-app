@@ -4,7 +4,9 @@
 
     <!-- Wiadomość po rejestracji -->
     <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
-    <p>Witaj, {{ authStore.user?.name }}!</p>
+    <p>
+      Witaj, <span class="user-name">{{ authStore.user?.name }}!</span>
+    </p>
   </div>
 </template>
 
@@ -39,5 +41,10 @@ if (route.query.success) {
 
 .centered {
   text-align: center;
+}
+
+.user-name {
+  color: green;
+  font-weight: bold;
 }
 </style>

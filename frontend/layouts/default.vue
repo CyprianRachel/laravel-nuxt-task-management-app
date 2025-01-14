@@ -18,7 +18,10 @@
           <NuxtLink to="/add-member">Dodaj członka zespołu</NuxtLink>
         </li>
         <li>
-          <button @click="logout">Wyloguj się</button>
+          <NuxtLink to="/register">Zarejestruj się</NuxtLink>
+        </li>
+        <li>
+          <button class="logout" @click="logout">Wyloguj się</button>
         </li>
       </ul>
     </nav>
@@ -63,8 +66,13 @@ const logout = () => {
 
 .app-menu {
   background-color: #f8f9fa;
-  padding: 1rem;
+  padding: 1rem 0rem;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .app-menu ul {
@@ -74,6 +82,7 @@ const logout = () => {
   display: flex;
   justify-content: center;
   gap: 1rem;
+  align-items: center;
 }
 
 .app-menu li {

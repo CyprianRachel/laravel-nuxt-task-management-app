@@ -1,48 +1,49 @@
 <template>
-  <div class="register centered">
-    <h1>Register</h1>
+  <div class="register">
+    <h1>Zarejestruj się</h1>
     <form @submit.prevent="onSubmit">
-      <p>
-        <label>Name:</label>
+      <div class="form-group">
+        <label>Imię i nazwisko</label>
         <input
           v-model="form.name"
           type="text"
-          placeholder="Enter your name"
+          placeholder="Wpisz imię i nazwisko"
           required
         />
-      </p>
+      </div>
 
-      <p>
-        <label>Email:</label>
+      <div class="form-group">
+        <label>Adres e-mail </label>
         <input
           v-model="form.email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Wpisz adres e-mail"
           required
         />
-      </p>
+      </div>
 
-      <p>
-        <label>Password:</label>
+      <div class="form-group">
+        <label>Hasło </label>
         <input
           v-model="form.password"
+          minlength="8"
+          placeholder="Wpisz hasło (min. 8 znaków)"
           type="password"
-          placeholder="Enter your password"
           required
         />
-      </p>
+      </div>
 
-      <p>
-        <label>Organization Name:</label>
+      <div class="form-group">
+        <label>Nazwa zespołu:</label>
         <input
           v-model="form.organization_name"
           type="text"
-          placeholder="Enter your organization name"
+          placeholder="Wpisz nazwę swojego zespołu"
           required
         />
-      </p>
+      </div>
 
-      <button type="submit">Register</button>
+      <button type="submit">Zarejestruj się</button>
     </form>
 
     <p v-if="error" class="error">{{ error }}</p>
@@ -79,8 +80,46 @@ const onSubmit = async () => {
 };
 </script>
 
-<style>
-.error {
+<style scoped>
+.register {
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.success-message {
+  margin-top: 1rem;
+  color: green;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-message {
+  margin-top: 1rem;
   color: red;
+  font-weight: bold;
+  text-align: center;
 }
 </style>
