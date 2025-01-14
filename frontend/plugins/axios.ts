@@ -4,7 +4,7 @@ import { useAuthStore } from "~/stores/auth";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const api = axios.create({
-    baseURL: "http://127.0.0.1:8000/api", // Adres backendu
+    baseURL: "https://laravel-nuxt-task-management-app.onrender.com/api", // Adres backendu
   });
 
   // Dodawanie tokena do każdego żądania
