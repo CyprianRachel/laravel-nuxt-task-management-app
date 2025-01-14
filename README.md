@@ -2,9 +2,22 @@
 
 Aplikacja do zarządzania zadaniami w zespołach, zaprojektowana z myślą o efektywnym przypisywaniu i monitorowaniu realizacji zadań w ramach organizacji. Aplikacja pozwala administratorom generować zadania, przypisywać je członkom zespołu oraz monitorować postępy w realizacji.
 
-![Project Image](frontend/assets/project-look.png)
-![laravel-nuxt-task-management-app vercel app_orders](https://github.com/user-attachments/assets/f3dc382b-c17a-4ebd-b938-e9d00bb87f20)
+## **Demo**
 
+[Kliknij tutaj, aby zobaczyć wersję demo aplikacji](https://laravel-nuxt-task-management-app.vercel.app/login)
+
+---
+
+| ![laravel-nuxt-task-management-app vercel app_orders (8)](https://github.com/user-attachments/assets/92256dd8-1c40-48e8-9269-404dd993024e) |
+|-------------------------------------------------------|
+
+| ![Image 1](https://github.com/user-attachments/assets/53fbbad4-5eeb-41ff-9a77-1675b69672bc) | ![Image 2](https://github.com/user-attachments/assets/430a92cf-6a6f-4836-80dd-63b169a6dfa4) | ![Image 7](https://github.com/user-attachments/assets/0b96d053-6598-4bbc-91c0-f4a64238bd6d) |
+|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|
+
+| ![Image 4](https://github.com/user-attachments/assets/aef170a8-791f-42ef-82a6-e7203b288651) | ![Image 5](https://github.com/user-attachments/assets/94e09d88-fd7f-4695-82bc-95b7dcc59ba9) | ![Image 7](https://github.com/user-attachments/assets/0b96d053-6598-4bbc-91c0-f4a64238bd6d) |
+|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|
+
+---
 
 ## **Technologie**
 
