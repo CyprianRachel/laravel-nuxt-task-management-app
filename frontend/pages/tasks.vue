@@ -225,4 +225,11 @@ label.checked-product {
   flex-direction: column;
   align-items: flex-start;
 }
+
+/* Stylizacja dla mniejszych ekranów */
+@media (max-width: 768px) {
+  .task-item {
+    width: 320px;
+  }
+}
 </style>

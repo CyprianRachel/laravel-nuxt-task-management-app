@@ -271,4 +271,15 @@ ul {
 .add-task-button {
   margin-top: 1rem;
 }
+
+/* Stylizacja dla mniejszych ekranów */
+@media (max-width: 768px) {
+  .bordered {
+    width: 320px;
+  }
+
+  .modal {
+    width: 320px;
+  }
+}
 </style>
