@@ -1,34 +1,28 @@
-# Użyj oficjalnego obrazu PHP z rozszerzeniami potrzebnymi dla Laravel
-FROM php:8.1-fpm
+# Wybierz obraz bazowy z PHP 8.2
+FROM php:8.2-fpm
 
-# Zainstaluj wymagane pakiety
+# Instalacja zależności systemowych i rozszerzeń PHP
 RUN apt-get update && apt-get install -y \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
     git \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Instalacja kompozytora (Composer)
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+    unzip \
+    libpq-dev && \
+    docker-php-ext-install pdo pdo_pgsql
 
 # Ustaw katalog roboczy
 WORKDIR /var/www
 
-# Skopiuj pliki aplikacji do kontenera
+# Skopiuj pliki projektu do obrazu
 COPY . .
 
-# Instalacja zależności aplikacji Laravel
+# Instalacja zależności Laravel za pomocą Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-dev --optimize-autoloader
 
 # Ustawienia uprawnień
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www
 
-# Domyślne polecenie startowe
-CMD php artisan serve --host=0.0.0.0 --port=80
+# Eksponuj port
+EXPOSE 9000
 
-# Otwórz port 80
-EXPOSE 80
+# Komenda startowa
+CMD ["php-fpm"]
