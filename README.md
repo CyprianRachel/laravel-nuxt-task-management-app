@@ -1,7 +1,8 @@
 # Task Management App
 
 Aplikacja do zarządzania zadaniami w zespołach, zaprojektowana z myślą o efektywnym przypisywaniu i monitorowaniu realizacji zadań w ramach organizacji. Aplikacja pozwala administratorom generować zadania, przypisywać je członkom zespołu oraz monitorować postępy w realizacji.
-![Project Image](frontend\assets\project-look.png)
+
+![Project Image](frontend/assets/project-look.png)
 
 ---
 
