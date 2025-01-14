@@ -3,11 +3,11 @@
     <h1>Zaloguj się</h1>
     <form @submit.prevent="onSubmit">
       <div class="form-group">
-        <label>Adres e-mail </label>
+        <label>Adres e-mail</label>
         <input
           v-model="form.email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Wpisz swój adres e-mail"
           required
         />
       </div>
@@ -16,7 +16,7 @@
         <input
           v-model="form.password"
           type="password"
-          placeholder="Enter your password"
+          placeholder="Wpisz swoje hasło"
           required
         />
       </div>
@@ -25,6 +25,28 @@
     </form>
 
     <p v-if="error" class="error">{{ error }}</p>
+
+    <!-- Informacja o możliwościach -->
+    <div class="info-section">
+      <p>
+        Możesz założyć konto lub skorzystać z jednego z poniższych kont
+        testowych.
+      </p>
+    </div>
+
+    <!-- Dane testowe konta administratora -->
+    <div class="test-account">
+      <h2>Dane testowe - Konto Administratora</h2>
+      <p><strong>Login:</strong> stefan@example.com</p>
+      <p><strong>Hasło:</strong> example123</p>
+    </div>
+
+    <!-- Dane testowe konta użytkownika -->
+    <div class="test-account">
+      <h2>Dane testowe - Konto Użytkownika</h2>
+      <p><strong>Login:</strong> kuncz@example.com</p>
+      <p><strong>Hasło:</strong> example123</p>
+    </div>
   </div>
 </template>
 
@@ -48,7 +70,7 @@ const onSubmit = async () => {
     authStore.setUser(data.user);
     navigateTo("/"); // Przekierowanie do strony głównej
   } catch (err) {
-    error.value = "Invalid login credentials";
+    error.value = "Nieprawidłowe dane logowania.";
   }
 };
 </script>
@@ -78,21 +100,49 @@ input {
   font-size: 1rem;
 }
 
-.btn-submit:hover {
+button {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
   background-color: #0056b3;
 }
 
-.success-message {
-  margin-top: 1rem;
-  color: green;
-  font-weight: bold;
-  text-align: center;
-}
-
-.error-message {
+.error {
   margin-top: 1rem;
   color: red;
   font-weight: bold;
   text-align: center;
+}
+
+.info-section {
+  margin-top: 2rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.test-account {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.test-account h2 {
+  margin-bottom: 0.5rem;
+  color: #007bff;
+}
+
+.test-account p {
+  margin: 0.5rem 0;
 }
 </style>

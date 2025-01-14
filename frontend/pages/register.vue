@@ -72,10 +72,10 @@ const onSubmit = async () => {
     authStore.setUser(data.user);
     navigateTo({
       path: "/", // Przekierowanie do strony głównej
-      query: { success: "Dziękujemy za rejestrację!" }, // Wiadomość w URL
+      query: { success: "Dziękujemy za rejestrację!" },
     });
   } catch (err) {
-    error.value = "Registration failed";
+    error.value = "Błąd rejestracji";
   }
 };
 </script>

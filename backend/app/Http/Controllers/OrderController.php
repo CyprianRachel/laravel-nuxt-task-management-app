@@ -29,7 +29,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Nie jesteś przypisany do organizacji'], 403);
         }
     
-        // Utwórz zamówienie
+        // Tworzenie zamówienia
         $order = \App\Models\Order::create([
             'organization_id' => $organization->id,
             'status' => 'open',
@@ -58,12 +58,12 @@ class OrderController extends Controller
 
     $user = $request->user();
 
-    // Sprawdź, czy użytkownik jest adminem
+    // Sprawdzenie, czy użytkownik jest adminem
     if ($user->role !== 'admin') {
         return response()->json(['error' => 'Unauthorized'], 403);
     }
 
-    // Znajdź zamówienie
+    // Szukanie zamówienia
     $order = Order::where('id', $orderId)
                   ->where('organization_id', $user->organization_id)
                   ->first();
@@ -72,7 +72,7 @@ class OrderController extends Controller
         return response()->json(['error' => 'Order not found'], 404);
     }
 
-    // Przypisz zamówienie użytkownikowi
+    // Przypisanie zamówienia użytkownikowi
     $order->update([
         'assigned_to' => $request->user_id,
     ]);

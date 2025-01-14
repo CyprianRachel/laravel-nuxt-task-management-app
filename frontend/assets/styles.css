@@ -31,3 +31,7 @@ p {
   align-items: center;
   flex-direction: column;
 }
+
+input {
+  box-sizing: border-box;
+}

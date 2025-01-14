@@ -24,13 +24,13 @@ class AuthController extends Controller
             'organization_name' => 'required|string|max:255',
         ]);
 
-        // Tworzymy organizację
+        // Tworzenie organizacji
         $organization = Organization::create([
             'name' => $validatedData['organization_name'],
             // ewentualnie: 'address', 'phone', itp. jeśli masz takie pola
         ]);
 
-        // Tworzymy usera (domyślnie admin)
+        // Tworzenie usera (domyślnie admin)
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
@@ -39,10 +39,9 @@ class AuthController extends Controller
             'role' => 'admin', // pierwszy user w organizacji jest adminem
         ]);
 
-        // Generujemy token (Laravel Sanctum)
+        // Generowanie tokena (Laravel Sanctum)
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Zwracamy w formacie JSON
         return response()->json([
             'access_token' => $token,
             'user' => $user,
@@ -50,7 +49,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Logowanie: sprawdza email i hasło, tworzy nowy token.
+     * Logowanie: sprawdź email i hasło, utwórz nowy token.
      */
     public function login(Request $request)
     {
@@ -60,7 +59,7 @@ class AuthController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        // Szukamy usera po email
+        // Szukanie usera po email
         $user = User::where('email', $credentials['email'])->first();
 
         // Weryfikacja hasła
@@ -68,7 +67,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Usuwamy stare tokeny (opcjonalnie) i tworzymy nowy
+        // Usuwanie starych tokenów i tworzenie nowych
         $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -79,7 +78,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Wylogowanie: usuwa token aktualnego zapytania.
+     * Wylogowanie: usuwanie tokenów aktualnego zapytania.
      * Działa tylko, jeśli user jest zalogowany (middleware auth:sanctum).
      */
     public function logout(Request $request)

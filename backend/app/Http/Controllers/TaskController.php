@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Task;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Dodaj ten import
+use Illuminate\Support\Facades\Auth;
 
 
 class TaskController extends Controller
@@ -17,22 +17,21 @@ class TaskController extends Controller
        public function getTasksForUser(Request $request)
             {
                 try {
-                    // Pobierz aktualnie zalogowanego użytkownika
+                    // Pobieranie aktualnie zalogowanego użytkownika
                     $user = Auth::user();
 
                     // Jeśli użytkownik nie jest administratorem, pobierz jego zadania
                     if ($user->role !== 'admin') {
                         // Pobranie zadań użytkownika z powiązanymi produktami i zamówieniami
                         $tasks = Task::where('user_id', $user->id)
-                            ->with(['order.items.product']) // Załaduj powiązane produkty przez zamówienie
+                            ->with(['order.items.product']) // Ładowanie powiązanych produktów przez zamówienie
                             ->get();
 
                         return response()->json($tasks); // Zwrócenie zadań z produktami w formacie JSON
                     }
 
-                    return response()->json([], 200); // Jeśli użytkownik jest adminem, zwróć pustą tablicę
+                    return response()->json([], 200); 
                 } catch (\Exception $e) {
-                    // W przypadku błędu, zwróć komunikat błędu i kod 500
                     return response()->json(['message' => 'Wystąpił błąd podczas pobierania zadań', 'error' => $e->getMessage()], 500);
                 }
             }
@@ -48,11 +47,11 @@ class TaskController extends Controller
 
         // Sprawdzenie, czy użytkownik jest administratorem
         if ($user->role === 'admin') {
-            // Jeśli użytkownik jest administratorem, nie przypisujemy zadania
-            return response()->json(['message' => 'Nie można przypisać zadania administratorowi.'], 400);  // Status 400: Zły request
+            // Jeśli użytkownik jest administratorem, nie przypisuj zadania
+            return response()->json(['message' => 'Nie można przypisać zadania administratorowi.'], 400); 
         }
 
-        // Tworzymy nowe zadanie, przypisując je do zamówienia i użytkownika
+        // Tworzenie nowego zadania, przypisując je do zamówienia i użytkownika
         $task = Task::create([
             'order_id' => $order->id,
             'user_id' => $user->id,
@@ -60,7 +59,7 @@ class TaskController extends Controller
         ]);
 
         // Zwrócenie przypisanego zadania
-        return response()->json($task, 201);  // Status 201: Stworzony zasób
+        return response()->json($task, 201); 
     }
 
     public function markAsDone(Request $request, $taskId)
@@ -76,7 +75,7 @@ class TaskController extends Controller
     $order->status = 'closed';
     $order->save();
 
-    // Usunięcie zadania z tabeli tasks (opcjonalnie)
+    // Usunięcie zadania z tabeli tasks
     $task->delete();
 
     return response()->json(['message' => 'Zadanie zostało zakończone']);

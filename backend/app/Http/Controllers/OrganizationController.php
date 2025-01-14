@@ -16,7 +16,7 @@ class OrganizationController extends Controller
     {
         $authUser = $request->user();
 
-        // Sprawdzamy rolę admin
+        // Sprawdzenie roli admin
         if ($authUser->role !== 'admin') {
             return response()->json(['message' => 'Forbidden'], 403);
         }
@@ -28,7 +28,7 @@ class OrganizationController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        // Tworzymy nowego usera w tej samej organizacji co admin
+        // Tworzenie nowego usera w tej samej organizacji co admin
         $newUser = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
@@ -37,7 +37,6 @@ class OrganizationController extends Controller
             'role' => 'member',
         ]);
 
-        // Zwracamy info w JSON
         return response()->json([
             'message' => 'User created',
             'user' => $newUser,

@@ -47,9 +47,13 @@
       {{ successMessage }}
     </div>
 
-    <!-- Wiadomość o błędzie -->
-    <div v-if="errorMessage" class="error-message">
-      {{ errorMessage }}
+    <!-- Wiadomości o błędach -->
+    <div v-if="errorMessages.length > 0" class="error-messages">
+      <ul>
+        <li v-for="(error, index) in errorMessages" :key="index">
+          {{ error }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -64,12 +68,12 @@ const form = ref({
 });
 
 const successMessage = ref("");
-const errorMessage = ref("");
+const errorMessages = ref([]);
 
 // Funkcja dodawania członka
 const addMember = async () => {
   successMessage.value = "";
-  errorMessage.value = "";
+  errorMessages.value = [];
 
   try {
     const { $api } = useNuxtApp(); // Użycie Nuxt.js do komunikacji z backendem
@@ -85,14 +89,21 @@ const addMember = async () => {
     form.value.email = "";
     form.value.password = "";
   } catch (error) {
-    // Obsługa błędów
+    // Obsługa błędów walidacji
     if (error.response?.status === 403) {
-      errorMessage.value = "Nie masz uprawnień do dodawania członków.";
+      errorMessages.value = ["Nie masz uprawnień do dodawania członków."];
     } else if (error.response?.status === 422) {
-      errorMessage.value =
-        "Dane są nieprawidłowe. Sprawdź wprowadzone informacje.";
+      // Wyciągnięcie szczegółowych błędów z odpowiedzi backendu
+      const errors = error.response?.data?.errors;
+      if (errors) {
+        errorMessages.value = Object.values(errors).flat();
+      } else {
+        errorMessages.value = [
+          "Dane są nieprawidłowe. Sprawdź wprowadzone informacje.",
+        ];
+      }
     } else {
-      errorMessage.value = "Wystąpił błąd. Spróbuj ponownie.";
+      errorMessages.value = ["Wystąpił błąd. Spróbuj ponownie."];
     }
   }
 };
@@ -123,6 +134,14 @@ input {
   font-size: 1rem;
 }
 
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.btn-submit {
+}
+
 .btn-submit:hover {
   background-color: #0056b3;
 }
@@ -134,10 +153,20 @@ input {
   text-align: center;
 }
 
-.error-message {
+.error-messages {
   margin-top: 1rem;
   color: red;
   font-weight: bold;
   text-align: center;
+}
+
+.error-messages ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.error-messages li {
+  margin: 0.25rem 0;
 }
 </style>

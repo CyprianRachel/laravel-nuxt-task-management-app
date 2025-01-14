@@ -12,10 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Pola, które można masowo przypisywać (mass assignment).
-     * Dzięki temu np. User::create([...]) zadziała.
-     */
+    //Pola, które można masowo przypisywać (mass assignment).
+
     protected $fillable = [
         'name',
         'email',
@@ -24,27 +22,19 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
-     * Pola, które powinny być ukryte podczas serializacji (np. w JSON).
-     */
+    //Pola, które powinny być ukryte podczas serializacji.
+
     protected $hidden = [
         'password',
         'remember_token',
-        // ewentualnie 'pivot', jeśli używasz relacji many-to-many
     ];
 
-    /**
-     * Rzutowania kolumn na konkretne typy.
-     */
+    //Rzutowania kolumn na konkretne typy.
+
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // 'password' => 'hashed' // w Laravel 10+ możesz odkomentować, by użyć hashowania
     ];
 
-    /**
-     * Relacja do modelu Organization.
-     * user.organization_id -> organizations.id
-     */
     public function organization()
     {
         return $this->belongsTo(Organization::class);
@@ -57,7 +47,7 @@ class User extends Authenticatable
 
     public function getTasks()
 {
-    $tasks = Task::with(['orderItems.product'])->get(); // Pobieramy zadania wraz z produktami przypisanymi do zamówienia
+    $tasks = Task::with(['orderItems.product'])->get(); // Pobieranie zadania wraz z produktami przypisanymi do zamówienia
     return response()->json($tasks);
 }
 

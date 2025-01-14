@@ -14,12 +14,12 @@ export const useAuthStore = defineStore("auth", {
     setToken(token: string) {
       this.token = token;
       localStorage.setItem("authToken", token);
-      console.log("Token zapisany:", token); // Logowanie tokena
+      // console.log("Token zapisany:", token); // Logowanie tokena
     },
     setUser(user: any) {
       this.user = user;
       localStorage.setItem("authUser", JSON.stringify(user));
-      console.log("Użytkownik zapisany:", user); // Logowanie użytkownika
+      // console.log("Użytkownik zapisany:", user); // Logowanie użytkownika
     },
     loadAuthData() {
       const token = localStorage.getItem("authToken");
@@ -27,16 +27,16 @@ export const useAuthStore = defineStore("auth", {
 
       if (token) {
         this.token = token;
-        console.log("Token załadowany:", token);
+        // console.log("Token załadowany:", token);
       } else {
-        console.log("Brak tokena w localStorage");
+        // console.log("Brak tokena w localStorage");
       }
 
       if (user) {
         this.user = JSON.parse(user);
-        console.log("Użytkownik załadowany:", this.user);
+        // console.log("Użytkownik załadowany:", this.user);
       } else {
-        console.log("Brak użytkownika w localStorage");
+        // console.log("Brak użytkownika w localStorage");
       }
     },
     logout() {
@@ -44,7 +44,7 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       localStorage.removeItem("authToken");
       localStorage.removeItem("authUser");
-      console.log("Wylogowano użytkownika"); // Logowanie wylogowania
+      // console.log("Wylogowano użytkownika"); // Logowanie wylogowania
     },
   },
 });

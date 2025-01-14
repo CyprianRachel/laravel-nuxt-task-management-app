@@ -2,10 +2,8 @@
   <div class="tasks-page">
     <h1>Twoje zadania</h1>
 
-    <!-- Ładowanie -->
     <div v-if="loading">Ładowanie...</div>
 
-    <!-- Błąd -->
     <div v-if="error" class="error">{{ error }}</div>
 
     <!-- Brak zadań -->
@@ -80,7 +78,7 @@ const fetchTasks = async () => {
   loading.value = true;
   error.value = "";
   try {
-    const { $api } = useNuxtApp(); // Jeśli używasz Nuxt 3
+    const { $api } = useNuxtApp();
     const response = await $api.get("/tasks");
 
     if (response.data && Array.isArray(response.data)) {
@@ -90,7 +88,7 @@ const fetchTasks = async () => {
           task.order?.items.map((item) => ({
             ...item.product,
             quantity: item.quantity,
-            checked: false, // Domyślnie checkbox nie jest zaznaczony
+            checked: false, // Domyślne ustawienie checboxa na pusty
           })) || [],
       }));
     } else {
@@ -111,7 +109,7 @@ const markAsDone = async (taskId, orderId) => {
     const { $api } = useNuxtApp();
     await $api.post(`/tasks/${taskId}/mark-as-done`, { order_id: orderId });
 
-    // Zaktualizuj lokalnie status zadania
+    // Lokalna zmiana statusu zadania
     const taskIndex = tasks.value.findIndex((task) => task.id === taskId);
     if (taskIndex > -1) {
       tasks.value[taskIndex].completed = true;
@@ -129,7 +127,7 @@ const toggleProductCheck = (taskId, productId) => {
   if (task) {
     const product = task.products.find((p) => p.id === productId);
     if (product) {
-      product.checked = !product.checked; // Zmień stan zaznaczenia
+      product.checked = !product.checked; // Zmiena stanu zaznaczenia
     }
   }
 };

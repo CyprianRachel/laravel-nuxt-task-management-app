@@ -13,7 +13,7 @@
     <!-- Lista zamówień -->
     <div
       class="bordered"
-      v-for="order in orders"
+      v-for="order in sortedOrders"
       :key="order.id"
       :class="{ 'closed-order': order.status === 'closed' }"
     >
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useAuthStore } from "~/stores/auth";
 
 const authStore = useAuthStore();
@@ -79,8 +79,15 @@ const showModal = ref(false);
 const selectedOrderId = ref(null);
 const selectedUserId = ref(null);
 
-// Sprawdzamy, czy użytkownik jest administratorem
+// Sprawdzenie, czy użytkownik jest administratorem
 const isAdmin = computed(() => authStore.user?.role === "admin");
+
+// Posortowane zamówienia: najpierw "open", potem "closed"
+const sortedOrders = computed(() => {
+  return orders.value.sort((a, b) =>
+    a.status === "open" && b.status === "closed" ? -1 : 0
+  );
+});
 
 // Funkcja do pobierania zamówień
 const fetchOrders = async () => {
@@ -175,6 +182,7 @@ onMounted(async () => {
 .error {
   color: red;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .modal {

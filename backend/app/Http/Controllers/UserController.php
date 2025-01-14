@@ -12,7 +12,7 @@ class UserController extends Controller
         $user = $request->user();
     
     
-        // Pobierz użytkowników z tej samej organizacji (bez adminów)
+        // Pobieranie użytkowników z tej samej organizacji (bez adminów)
         $users = User::where('organization_id', $user->organization_id)
                      ->where('role', '!=', 'admin')
                      ->get();
