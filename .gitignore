@@ -3,7 +3,7 @@ node_modules
 .nuxt
 
 # Ignoruj plik .env (konfiguracje, hasła, klucze)
-.env
+# .env
 
 # Ignoruj pliki logów
 *.log
